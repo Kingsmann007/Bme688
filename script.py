@@ -2,18 +2,19 @@ import time
 import board
 import adafruit_bme680
 import datetime
-#Initialisieren
+#initial setup
 i2c = board.I2C()
 bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
 #zeit
 zeit = datetime.datetime.now()
-#listen für Werte
+#lists for values
 tmp = []
 gas = []
 hum = []
 dru = []
 for i in range(0,5):
-#Erster ausgelesener werd ist immer falsch Bsp. hum immer 100%, werden daher vernachlässigt
+#hum is always 100% the first time getting data
+#the first reading will therfore be disregarded
 	if i>0:
 		tmp.append(bme680.temperature)
 		gas.append(bme680.gas)
@@ -25,16 +26,15 @@ for i in range(0,5):
 		bme680.relative_humidity
 		bme680.pressure
 	time.sleep(0.5)
-#Durchschnitswerte
+#claculating averages
 tmp_avg = sum(tmp)/len(tmp)
 gas_avg = sum(gas)/len(gas)
 hum_avg = sum(hum)/len(hum)
 dru_avg = sum(dru)/len(dru)
-#Werte in datei schreiben
+#writing data to file
 with open('data.txt','a') as d: 
 	d.write(zeit.strftime("%d/%m/%Y %H:%M:%S"))
 	d.write("; Tmp: %0.1f C; " % tmp_avg-1)
 	d.write("Gas: %d ohm; " % gas_avg)
 	d.write("Hum: %0.1f %%; " % hum_avg-5)
 	d.write("Dru: %0.3f hPa;\n" % dru_avg)
-d.close
