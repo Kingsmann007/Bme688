@@ -32,7 +32,9 @@ gas_avg = sum(gas)/len(gas)
 hum_avg = sum(hum)/len(hum)
 dru_avg = sum(dru)/len(dru)
 #writing data to file
-with open('data.txt','a') as d: 
+file = "data/"
+file += zeit.strftime("%Y%m%d.txt")
+with open(file ,'a') as d: 
 	d.write(zeit.strftime("%d/%m/%Y %H:%M:%S"))
 	d.write("; Tmp: %0.1f C; " % tmp_avg-1)
 	d.write("Gas: %d ohm; " % gas_avg)
